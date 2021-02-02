@@ -1,0 +1,33 @@
+syntax = "proto3";
+package api;
+
+option go_package = ".;helloworld";
+
+import "grpc-graphql-gateway/include/graphql/graphql.proto";
+import "google/api/annotations.proto";
+
+message HelloWorldRequest {
+    string name = 1;
+};
+
+message HelloWorldResponse {
+    string hello_java = 1;
+    string hello_go = 2;
+    string hello_node = 3;
+    string hello_react = 4;
+    string hello_docker = 5;
+    string hello_flutter = 6;
+    string hello_world = 7;
+};
+
+service HelloWorldService {
+    rpc Greating(HelloWorldRequest) returns (HelloWorldResponse) {
+        option (graphql.schema) = {
+            type: QUERY
+            name: "HelloWorld"
+        };
+        option (google.api.http) = {
+            get: "/helloworld"
+        };
+    };
+};
