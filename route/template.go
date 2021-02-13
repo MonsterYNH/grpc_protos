@@ -7,19 +7,9 @@ package gateway
 
 import "protoc-gen-gateway/route"
 
-var routes []route.Info
-
-func RegisterInfo(info route.Info) {
-	routes = append(routes, info)
-}
-
-func GetInfos() []route.Info {
-	return routes
-}
-
 func init() {
 {{ range . }}
-	RegisterInfo(route.Info{
+	route.RegisterInfo(route.Info{
 		ServiceName:  "{{.ServiceName}}",
 		Method:       "{{.Method}}",
 		Pattern:      "{{.Pattern}}",
@@ -39,7 +29,7 @@ import "protoc-gen-gateway/route"
 
 func init() {
 {{ range . }}
-	RegisterInfo(route.Info{
+	route.RegisterInfo(route.Info{
 		ServiceName:  "{{.ServiceName}}",
 		Method:       "{{.Method}}",
 		Pattern:      "{{.Pattern}}",

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
-	"log"
 
 	"github.com/ysugimoto/grpc-graphql-gateway/protoc-gen-graphql/spec"
 	"google.golang.org/protobuf/compiler/protogen"
@@ -32,8 +31,6 @@ func parseGQLProtoFile(descs []*descriptorpb.FileDescriptorProto) ([]Info, error
 	infos := make([]Info, 0)
 	for _, file := range files {
 		for _, service := range file.Services() {
-
-			log.Println(service.Name(), "======")
 			for _, method := range service.Methods() {
 				infos = append(infos, Info{
 					ServiceName:  service.Name(),
@@ -42,10 +39,6 @@ func parseGQLProtoFile(descs []*descriptorpb.FileDescriptorProto) ([]Info, error
 					RequestType:  method.Input(),
 					ResponseType: method.Output(),
 				})
-				log.Println(method.Schema.GetType(), "======")
-				log.Println(method.Schema.GetName(), "======")
-				log.Println(method.Input(), "======")
-				log.Println(method.Output(), "======")
 			}
 		}
 	}

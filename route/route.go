@@ -8,3 +8,15 @@ type Info struct {
 	RequestType  string
 	ResponseType string
 }
+
+var routes []Info
+
+// RegisterInfo regist info
+func RegisterInfo(info Info) {
+	routes = append(routes, info)
+}
+
+// GetInfos get infos
+func GetInfos() []Info {
+	return routes
+}
