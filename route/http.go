@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
-	"log"
 
 	"github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway/descriptor"
 	options "google.golang.org/genproto/googleapis/api/annotations"
@@ -36,7 +35,6 @@ func parseHTTPProtoFile(file *protogen.File) ([]Info, error) {
 	routes := make([]Info, 0)
 	for _, service := range f.GetService() {
 		for _, method := range service.GetMethod() {
-			log.Println(method.GetName())
 			serviceName := method.GetName()
 			var httpMethod, httpPattern string
 			ext := proto.GetExtension(method.Options, options.E_Http)

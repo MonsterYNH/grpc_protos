@@ -32,6 +32,9 @@ func parseGQLProtoFile(descs []*descriptorpb.FileDescriptorProto) ([]Info, error
 	for _, file := range files {
 		for _, service := range file.Services() {
 			for _, method := range service.Methods() {
+				if len(method.Schema.GetName()) == 0 {
+					continue
+				}
 				infos = append(infos, Info{
 					ServiceName:  service.Name(),
 					Method:       method.Schema.GetType().String(),
