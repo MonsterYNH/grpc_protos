@@ -32,7 +32,7 @@ func main() {
 		panic(err)
 	}
 
-	if err := route.DealGQLRouteInfo(file.GeneratedFilenamePrefix, plugin, req.GetProtoFile()); err != nil {
+	if err := route.DealGQLRouteInfo(file, plugin, req.GetProtoFile()); err != nil {
 		panic(err)
 	}
 

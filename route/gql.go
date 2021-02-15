@@ -11,13 +11,13 @@ import (
 )
 
 // DealGQLRouteInfo deal gql route info
-func DealGQLRouteInfo(filePrefix string, plugin *protogen.Plugin, descs []*descriptorpb.FileDescriptorProto) error {
+func DealGQLRouteInfo(file *protogen.File, plugin *protogen.Plugin, descs []*descriptorpb.FileDescriptorProto) error {
 	infos, err := parseGQLProtoFile(descs)
 	if err != nil {
 		return err
 	}
 
-	return generateGQLFile(infos, filePrefix, plugin)
+	return generateRouteInfoFile(file, "gql", plugin, infos)
 }
 
 func parseGQLProtoFile(descs []*descriptorpb.FileDescriptorProto) ([]Info, error) {

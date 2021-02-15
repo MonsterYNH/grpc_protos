@@ -19,7 +19,7 @@ func DealHTTPRouteInfo(file *protogen.File, plugin *protogen.Plugin) error {
 		return err
 	}
 
-	return generateHTTPFile(routeInfos, file.GeneratedFilenamePrefix, plugin)
+	return generateRouteInfoFile(file, "http", plugin, routeInfos)
 }
 
 // parseHTTPProtoFile parse http proto
