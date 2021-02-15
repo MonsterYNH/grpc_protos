@@ -1,7 +1,6 @@
 package gateway
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/MonsterYNH/protoc-gen-gateway/route"
@@ -45,9 +44,6 @@ func (ser *Gateway) GetEndpoint() string {
 
 // Serve start service
 func (ser *Gateway) Serve() error {
-	if ser.ser != nil {
-		return errors.New("service: service is already serve")
-	}
 	ser.ser = &http.Server{
 		Addr:    ser.Endpoint,
 		Handler: ser.mux,
