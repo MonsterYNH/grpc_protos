@@ -10,8 +10,8 @@ import (
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
-// DealGQLGateway deal gql gateway
-func DealGQLGateway(filePrefix string, plugin *protogen.Plugin, descs []*descriptorpb.FileDescriptorProto) error {
+// DealGQLRouteInfo deal gql route info
+func DealGQLRouteInfo(filePrefix string, plugin *protogen.Plugin, descs []*descriptorpb.FileDescriptorProto) error {
 	infos, err := parseGQLProtoFile(descs)
 	if err != nil {
 		return err
@@ -37,6 +37,7 @@ func parseGQLProtoFile(descs []*descriptorpb.FileDescriptorProto) ([]Info, error
 				}
 				infos = append(infos, Info{
 					ServiceName:  service.Name(),
+					Type:         RequestTypeGQL,
 					Method:       method.Schema.GetType().String(),
 					Pattern:      method.Schema.GetName(),
 					RequestType:  method.Input(),
@@ -51,12 +52,18 @@ func parseGQLProtoFile(descs []*descriptorpb.FileDescriptorProto) ([]Info, error
 func generateGQLFile(Infos []Info, filePrefix string, plugin *protogen.Plugin) error {
 	var buf bytes.Buffer
 
-	tmpl, err := template.New("gql").Parse(gqlGatewayTemplate)
+	tmpl, err := template.New("gql").Parse(httpRouteInfoTemplate)
 	if err != nil {
 		return err
 	}
 
-	if err := tmpl.Execute(&buf, Infos); err != nil {
+	if err := tmpl.Execute(&buf, struct {
+		FilePrefix string
+		Infos      []Info
+	}{
+		FilePrefix: filePrefix,
+		Infos:      Infos,
+	}); err != nil {
 		return err
 	}
 

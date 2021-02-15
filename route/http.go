@@ -12,8 +12,8 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// DealHTTPGateway deal http gateway
-func DealHTTPGateway(file *protogen.File, plugin *protogen.Plugin) error {
+// DealHTTPRouteInfo deal http routeinfo
+func DealHTTPRouteInfo(file *protogen.File, plugin *protogen.Plugin) error {
 	routeInfos, err := parseHTTPProtoFile(file)
 	if err != nil {
 		return err
@@ -61,6 +61,7 @@ func parseHTTPProtoFile(file *protogen.File) ([]Info, error) {
 			responseType := method.GetOutputType()
 			routes = append(routes, Info{
 				ServiceName:  serviceName,
+				Type:         RequestTypeHTTP,
 				Method:       httpMethod,
 				Pattern:      httpPattern,
 				RequestType:  requestType,
@@ -76,16 +77,22 @@ func parseHTTPProtoFile(file *protogen.File) ([]Info, error) {
 func generateHTTPFile(Infos []Info, filePrefix string, plugin *protogen.Plugin) error {
 	var buf bytes.Buffer
 
-	tmpl, err := template.New("http").Parse(httpGatewayTemplate)
+	tmpl, err := template.New("http").Parse(httpRouteInfoTemplate)
 	if err != nil {
 		return err
 	}
 
-	if err := tmpl.Execute(&buf, Infos); err != nil {
+	if err := tmpl.Execute(&buf, struct {
+		FilePrefix string
+		Infos      []Info
+	}{
+		FilePrefix: filePrefix,
+		Infos:      Infos,
+	}); err != nil {
 		return err
 	}
 
-	fileName := fmt.Sprintf("%s%s.go", filePrefix, ".http.gateway")
+	fileName := fmt.Sprintf("%s%s", filePrefix, ".http.gateway.go")
 	template := plugin.NewGeneratedFile(fileName, ".")
 
 	template.Write(buf.Bytes())

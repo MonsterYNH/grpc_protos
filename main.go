@@ -28,11 +28,11 @@ func main() {
 
 	file := plugin.Files[len(plugin.Files)-1]
 
-	if err := route.DealHTTPGateway(file, plugin); err != nil {
+	if err := route.DealHTTPRouteInfo(file, plugin); err != nil {
 		panic(err)
 	}
 
-	if err := route.DealGQLGateway(file.GeneratedFilenamePrefix, plugin, req.GetProtoFile()); err != nil {
+	if err := route.DealGQLRouteInfo(file.GeneratedFilenamePrefix, plugin, req.GetProtoFile()); err != nil {
 		panic(err)
 	}
 
