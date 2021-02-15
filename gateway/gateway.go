@@ -1,11 +1,10 @@
 package gateway
 
 import (
-	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 
+	"github.com/MonsterYNH/protoc-gen-gateway/route"
 	"google.golang.org/grpc"
 )
 
@@ -14,15 +13,18 @@ type Gateway struct {
 	Name       string
 	Endpoint   string
 	EnableHTTP bool
+	mux        *Mux
 	ser        *http.Server
 }
 
 // NewGateway create gateway
-func NewGateway(name, endpoint string, enableHTTP bool) *Gateway {
+func NewGateway(name, endpoint string, enableHTTP bool, opt ...grpc.ServerOption) *Gateway {
 	return &Gateway{
 		Name:       name,
 		Endpoint:   endpoint,
 		EnableHTTP: enableHTTP,
+		mux:        NewMux(enableHTTP, opt...),
+		ser:        &http.Server{},
 	}
 }
 
@@ -31,20 +33,24 @@ func (ser *Gateway) GetName() string {
 	return ser.Name
 }
 
+// GetRouteInfos get route infos
+func (ser *Gateway) GetRouteInfos() []route.Info {
+	return ser.mux.GetRouteInfos()
+}
+
+// GetEndpoint get endpoint
+func (ser *Gateway) GetEndpoint() string {
+	return ser.Endpoint
+}
+
 // Serve start service
-func (ser *Gateway) Serve(opt ...grpc.ServerOption) error {
+func (ser *Gateway) Serve() error {
 	if ser.ser != nil {
 		return errors.New("service: service is already serve")
 	}
-	mux := NewMux(ser.EnableHTTP, opt...)
-	routeInfos := mux.GetRouteInfos()
-	for _, info := range routeInfos {
-		bytes, _ := json.Marshal(info)
-		fmt.Println(bytes)
-	}
 	ser.ser = &http.Server{
 		Addr:    ser.Endpoint,
-		Handler: mux,
+		Handler: ser.mux,
 	}
 
 	return ser.ser.ListenAndServe()
