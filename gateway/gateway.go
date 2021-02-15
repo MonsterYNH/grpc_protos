@@ -1,7 +1,9 @@
 package gateway
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"google.golang.org/grpc"
@@ -35,6 +37,11 @@ func (ser *Gateway) Serve(opt ...grpc.ServerOption) error {
 		return errors.New("service: service is already serve")
 	}
 	mux := NewMux(ser.EnableHTTP, opt...)
+	routeInfos := mux.GetRouteInfos()
+	for _, info := range routeInfos {
+		bytes, _ := json.Marshal(info)
+		fmt.Println(bytes)
+	}
 	ser.ser = &http.Server{
 		Addr:    ser.Endpoint,
 		Handler: mux,
