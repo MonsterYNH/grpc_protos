@@ -3,8 +3,9 @@ package gateway
 import (
 	"fmt"
 	"net/http"
-	"protoc-gen-gateway/route"
 	"strings"
+
+	"github.com/MonsterYNH/protoc-gen-gateway/route"
 
 	"google.golang.org/grpc"
 )

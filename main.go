@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"protoc-gen-gateway/route"
+	"github.com/MonsterYNH/protoc-gen-gateway/route"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"

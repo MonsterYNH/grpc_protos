@@ -5,7 +5,7 @@ var httpRouteInfoTemplate = `
 
 package gateway
 
-import "protoc-gen-gateway/route"
+import "github.com/MonsterYNH/protoc-gen-gateway/route"
 
 func init() {
 {{ range .Infos }}

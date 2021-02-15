@@ -25,7 +25,7 @@ func parseGQLProtoFile(descs []*descriptorpb.FileDescriptorProto) ([]Info, error
 	// in order to access easily plugin options, package name, comment, etc...
 	var files []*spec.File
 	for _, f := range descs {
-		files = append(files, spec.NewFile(f, false))
+		files = append(files, spec.NewFile(f, nil, false))
 	}
 
 	infos := make([]Info, 0)
